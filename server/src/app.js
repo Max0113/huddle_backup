@@ -3,6 +3,7 @@ import cors from "cors";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import workspaceRoutes from "./routes/workspace.route.js";
+import mapRoutes from "./routes/map.route.js";
 import { prisma } from "./lib/prisma.js";
 import cookieParser from "cookie-parser";
 
@@ -24,6 +25,8 @@ app.use(cookieParser());
 app.use("/auth", authRoutes);
 //workspace
 app.use("/workspaces", workspaceRoutes);
+//maps
+app.use("/maps", mapRoutes);
 
 app.get("/", async (req, res, next) => {
   try {
