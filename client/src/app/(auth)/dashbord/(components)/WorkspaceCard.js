@@ -1,4 +1,6 @@
+"use client";
 import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ExternalLink, MoreVertical, Trash2, Copy } from "lucide-react";
 import { toast } from "sonner";
+import { formatDistanceToNow } from "date-fns";
 
 const checkerboardStyle = {
   backgroundColor: "#fafafa",
@@ -34,7 +37,7 @@ function WorkspaceMenu({ workspace, onDuplicate, onDelete }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={`Open actions for ${workspace.title}`}
+        aria-label={`Open actions for ${workspace.nom}`}
         render={
           <Button
             type="button"
@@ -50,7 +53,7 @@ function WorkspaceMenu({ workspace, onDuplicate, onDelete }) {
       <DropdownMenuContent align="end" className="w-44">
         <DropdownMenuGroup>
           <DropdownMenuItem
-            onClick={() => toast.info(`Opening ${workspace.title}…`)}
+            onClick={() => toast.info(`Opening ${workspace.nom}…`)}
           >
             <ExternalLink aria-hidden="true" />
             Join
@@ -75,19 +78,35 @@ function WorkspaceMenu({ workspace, onDuplicate, onDelete }) {
 }
 
 export function WorkspaceCard({ workspace, onDuplicate, onDelete }) {
+  const [relativeDate, setRelativeDate] = useState("");
+
+  useEffect(() => {
+    const createdAt = workspace?.createdAt;
+
+    if (!createdAt) return;
+
+    const date = new Date(createdAt);
+
+    if (Number.isNaN(date.getTime())) {
+      setRelativeDate("Unknown date");
+      return;
+    }
+
+    setRelativeDate(formatDistanceToNow(date, { addSuffix: true }));
+  }, [workspace?.createdAt]);
+
   return (
     <article className="group min-w-0">
-      <WorkspacePreview title={workspace.title} />
+      <WorkspacePreview title={workspace.nom} />
 
       <div className="mt-3 flex items-center justify-between gap-2">
         <h2 className="min-w-0 truncate text-sm font-semibold">
-          {workspace.title}
+          {workspace.nom}
         </h2>
 
         <div className="flex shrink-0 items-center gap-0.5 pr-2">
-          <span className="text-xs text-muted-foreground">
-            {workspace.updatedAt}
-          </span>
+          <span className="text-xs text-muted-foreground">{relativeDate}</span>
+
           <WorkspaceMenu
             workspace={workspace}
             onDuplicate={onDuplicate}

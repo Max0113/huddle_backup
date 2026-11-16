@@ -11,11 +11,13 @@ import { CreateSchema } from "@/lib/validations/space";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Connect_Dash } from "@/components/router/connect_dash";
+import { useRouter } from "next/navigation";
 
-const inputClassName =
-  "h-[52px] rounded-2xl border-border bg-input px-4 text-base text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-base";
+const inputClassName = "h-11 rounded-xl border-border bg-muted/50 px-3.5";
 
 export default function CreateSpacePage() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -33,8 +35,9 @@ export default function CreateSpacePage() {
   const onSubmit = async (data) => {
     try {
       console.log("Create Space:", data);
-
+      await Connect_Dash.postWorkspace(data);
       toast.success("Space created.");
+      router.push("/dashbord");
     } catch (error) {
       toast.error("Something went wrong.");
     }
@@ -84,14 +87,14 @@ export default function CreateSpacePage() {
                   id="space-name"
                   placeholder="Réunion1"
                   autoComplete="off"
-                  aria-invalid={!!errors.name}
-                  {...register("name")}
+                  aria-invalid={!!errors.nom}
+                  {...register("nom")}
                   className={inputClassName}
                 />
 
-                {errors.name && (
+                {errors.nom && (
                   <p className="text-sm text-destructive" role="alert">
-                    {errors.name.message}
+                    {errors.nom.message}
                   </p>
                 )}
               </Field>
@@ -104,14 +107,14 @@ export default function CreateSpacePage() {
                   id="space-map"
                   type="text"
                   placeholder="Enter map ID"
-                  aria-invalid={!!errors.map_id}
-                  {...register("map_id")}
+                  aria-invalid={!!errors.mapId}
+                  {...register("mapId")}
                   className={inputClassName}
                 />
 
-                {errors.map_id && (
+                {errors.mapId && (
                   <p className="text-sm text-destructive" role="alert">
-                    {errors.map_id.message}
+                    {errors.mapId.message}
                   </p>
                 )}
               </Field>

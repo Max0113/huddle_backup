@@ -5,7 +5,7 @@ const nameSchema = z
   .trim()
   .min(3, "Name must be at least 3 characters")
   .max(24, "Name must be 24 characters or fewer")
-  .regex(/^[a-zA-Z]+$/, "Use letters, numbers, and underscores only");
+  .regex(/^[a-zA-Z0-9_]+$/, "Use letters, numbers, and underscores only");
 
 const mapIdSchema = z
   .string()
@@ -19,7 +19,7 @@ const descriptionSchema = z
   .optional();
 
 export const CreateSchema = z.object({
-  name: nameSchema,
-  map_id: mapIdSchema,
+  nom: nameSchema,
+  mapId: mapIdSchema,
   description: descriptionSchema,
 });

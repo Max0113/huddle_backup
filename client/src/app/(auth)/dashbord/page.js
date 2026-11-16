@@ -38,15 +38,10 @@ import { useRouter } from "next/navigation";
 import { WorkspaceCard } from "./(components)/WorkspaceCard";
 import { ResourcesMenu } from "./(components)/ResourcesMenu";
 import { ro } from "zod/v4/locales";
-
-const initialWorkspaces = [
-  { id: "study", title: "Study", updatedAt: "Today" },
-  { id: "meeting", title: "Meeting 10/12/2026", updatedAt: "last week" },
-  { id: "ai-project", title: "AI Project", updatedAt: "last month" },
-];
+import { Connect_Dash } from "@/components/router/connect_dash";
 
 export default function DashboardPage() {
-  const [workspaces, setWorkspaces] = useState(initialWorkspaces);
+  const [workspaces, setWorkspaces] = useState([]);
   const [query, setQuery] = useState("");
 
   const { isAuthenticated, isLoading } = useAuth();
@@ -58,6 +53,21 @@ export default function DashboardPage() {
     }
   }, [isAuthenticated, isLoading, router]);
 
+  useEffect(() => {
+    const fetchWorkspaces = async () => {
+      try {
+        const response = await Connect_Dash.getWorkspaces();
+        console.log("Workspaces fetched successfully:", response.data);
+        setWorkspaces(response.data.workspaces);
+      } catch (error) {
+        console.error("Error fetching workspaces:", error);
+        toast.error("Failed to load workspaces. Please try again later.");
+      }
+    };
+
+    fetchWorkspaces();
+  }, []);
+
   const normalizedQuery = query.trim().toLowerCase();
   const visibleWorkspaces = normalizedQuery
     ? workspaces.filter((workspace) =>
@@ -67,29 +77,27 @@ export default function DashboardPage() {
 
   const handleCreateSpace = () => {
     router.push("/spaces/create");
-
     setQuery("");
-    toast.success("Workspace created.");
   };
 
   const handleDuplicate = (workspace) => {
-    setWorkspaces((current) => [
-      {
-        ...workspace,
-        id: crypto.randomUUID(),
-        title: `${workspace.title} (Copy)`,
-        updatedAt: "Today",
-      },
-      ...current,
-    ]);
-    toast.success("Workspace duplicated.");
+    // setWorkspaces((current) => [
+    //   {
+    //     ...workspace,
+    //     id: crypto.randomUUID(),
+    //     title: `${workspace.title} (Copy)`,
+    //     updatedAt: "Today",
+    //   },
+    //   ...current,
+    // ]);
+    toast.info("This feature is not active yet.");
   };
 
   const handleDelete = (workspace) => {
-    setWorkspaces((current) =>
-      current.filter((item) => item.id !== workspace.id),
-    );
-    toast.success(`"${workspace.title}" deleted.`);
+    // setWorkspaces((current) =>
+    //   current.filter((item) => item.id !== workspace.id),
+    // );
+    toast.info(`"${workspace.title}" delete option is not active yet.`);
   };
 
   return (
