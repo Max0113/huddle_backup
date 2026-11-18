@@ -1,0 +1,262 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import {
+  ChevronUp,
+  Headphones,
+  Mic,
+  MicOff,
+  Smile,
+  VolumeX,
+} from "lucide-react";
+import { cn } from "cn";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import Portrait from "./Portrait";
+
+const MENU_CLASS =
+  "dark w-64 border border-white/10 bg-[#141417] p-1.5 text-zinc-100 shadow-2xl ring-1 ring-white/5";
+
+const CONTROL_BUTTON =
+  "grid size-9 place-items-center rounded-full text-[#c4a7f5] outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#c4a7f5] focus-visible:ring-offset-2 focus-visible:ring-offset-[#101013]";
+
+const CHEVRON_BUTTON =
+  "grid h-9 w-5 place-items-center rounded-full text-zinc-400 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#c4a7f5] focus-visible:ring-offset-2 focus-visible:ring-offset-[#101013]";
+
+const REACTIONS = ["👋", "🎉", "❤️", "😂", "👍"];
+
+export default function MediaBar({ displayName = "Youmes" }) {
+  const [micOn, setMicOn] = useState(true);
+  const [soundOn, setSoundOn] = useState(true);
+  const [micDevice, setMicDevice] = useState("default");
+  const [speakerDevice, setSpeakerDevice] = useState("speakers");
+  const [floating, setFloating] = useState([]);
+  const timers = useRef(new Set());
+  const reactionCount = useRef(0);
+
+  useEffect(() => {
+    const pending = timers.current;
+    return () => {
+      pending.forEach((timer) => clearTimeout(timer));
+      pending.clear();
+    };
+  }, []);
+
+  const react = (emoji) => {
+    reactionCount.current += 1;
+    const id = reactionCount.current;
+    const offset = ((id % 5) - 2) * 16;
+
+    setFloating((current) => [...current, { id, emoji, offset }]);
+
+    const timer = setTimeout(() => {
+      setFloating((current) => current.filter((item) => item.id !== id));
+      timers.current.delete(timer);
+    }, 1900);
+
+    timers.current.add(timer);
+  };
+
+  return (
+    <div className="absolute bottom-2 left-1/2 z-30 -translate-x-1/2 sm:bottom-5">
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-full h-24"
+        aria-hidden="true"
+      >
+        {floating.map((item) => (
+          <span
+            key={item.id}
+            className="absolute bottom-0 left-1/2 animate-bounce text-2xl drop-shadow-[0_6px_10px_rgba(0,0,0,.45)]"
+            style={{ marginLeft: `${item.offset}px` }}
+          >
+            {item.emoji}
+          </span>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-1 rounded-full border border-white/10 bg-[#101013]/95 p-1.5 shadow-[0_16px_44px_rgba(0,0,0,.5)] backdrop-blur-md">
+        <div className="relative mr-1 ml-0.5">
+          <span className="block size-9 overflow-hidden rounded-full ring-2 ring-[#9564dd]">
+            <Portrait variant="youmes" name={displayName} />
+          </span>
+          <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full bg-emerald-400 ring-2 ring-[#101013]" />
+        </div>
+
+        <div className="flex items-center rounded-full bg-white/[0.035] p-0.5 ring-1 ring-white/[0.05]">
+          <button
+            type="button"
+            onClick={() => setMicOn((value) => !value)}
+            aria-pressed={micOn}
+            aria-label={micOn ? "Mute microphone" : "Unmute microphone"}
+            title={micOn ? "Mute microphone" : "Unmute microphone"}
+            className={cn(CONTROL_BUTTON, !micOn && "text-rose-400")}
+          >
+            {micOn ? (
+              <Mic className="size-4" aria-hidden="true" />
+            ) : (
+              <MicOff className="size-4" aria-hidden="true" />
+            )}
+          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              aria-label="Microphone options"
+              title="Microphone options"
+              render={<button type="button" className={CHEVRON_BUTTON} />}
+            >
+              <ChevronUp className="size-3" aria-hidden="true" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              side="top"
+              align="center"
+              sideOffset={12}
+              className={MENU_CLASS}
+            >
+              <DropdownMenuRadioGroup
+                value={micDevice}
+                onValueChange={setMicDevice}
+              >
+                <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                  Microphone
+                </DropdownMenuLabel>
+                <DropdownMenuRadioItem
+                  value="default"
+                  className="rounded-lg focus:bg-white/10 focus:text-white"
+                >
+                  Default microphone
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem
+                  value="headset"
+                  className="rounded-lg focus:bg-white/10 focus:text-white"
+                >
+                  Studio headset
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+              <DropdownMenuSeparator className="bg-white/5" />
+              <DropdownMenuItem
+                onClick={() => setMicOn((value) => !value)}
+                className="rounded-lg focus:bg-white/10 focus:text-white"
+              >
+                {micOn ? (
+                  <MicOff className="size-3.5" aria-hidden="true" />
+                ) : (
+                  <Mic className="size-3.5" aria-hidden="true" />
+                )}
+                {micOn ? "Mute microphone" : "Unmute microphone"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="flex items-center rounded-full bg-white/[0.035] p-0.5 ring-1 ring-white/[0.05]">
+          <button
+            type="button"
+            onClick={() => setSoundOn((value) => !value)}
+            aria-pressed={soundOn}
+            aria-label={soundOn ? "Mute sound" : "Unmute sound"}
+            title={soundOn ? "Mute sound" : "Unmute sound"}
+            className={cn(CONTROL_BUTTON, !soundOn && "text-rose-400")}
+          >
+            {soundOn ? (
+              <Headphones className="size-4" aria-hidden="true" />
+            ) : (
+              <VolumeX className="size-4" aria-hidden="true" />
+            )}
+          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              aria-label="Speaker options"
+              title="Speaker options"
+              render={<button type="button" className={CHEVRON_BUTTON} />}
+            >
+              <ChevronUp className="size-3" aria-hidden="true" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              side="top"
+              align="center"
+              sideOffset={12}
+              className={MENU_CLASS}
+            >
+              <DropdownMenuRadioGroup
+                value={speakerDevice}
+                onValueChange={setSpeakerDevice}
+              >
+                <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                  Speakers
+                </DropdownMenuLabel>
+                <DropdownMenuRadioItem
+                  value="speakers"
+                  className="rounded-lg focus:bg-white/10 focus:text-white"
+                >
+                  MacBook speakers
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem
+                  value="headphones"
+                  className="rounded-lg focus:bg-white/10 focus:text-white"
+                >
+                  Studio headphones
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+              <DropdownMenuSeparator className="bg-white/5" />
+              <DropdownMenuItem
+                onClick={() => setSoundOn((value) => !value)}
+                className="rounded-lg focus:bg-white/10 focus:text-white"
+              >
+                {soundOn ? (
+                  <VolumeX className="size-3.5" aria-hidden="true" />
+                ) : (
+                  <Headphones className="size-3.5" aria-hidden="true" />
+                )}
+                {soundOn ? "Mute sound" : "Unmute sound"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <span className="mx-1 h-5 w-px bg-white/10" aria-hidden="true" />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            aria-label="Send a reaction"
+            title="Send a reaction"
+            render={<button type="button" className={CONTROL_BUTTON} />}
+          >
+            <Smile className="size-4" aria-hidden="true" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            side="top"
+            align="center"
+            sideOffset={12}
+            className="dark w-auto border border-white/10 bg-[#141417] p-1.5 text-zinc-100 shadow-2xl ring-1 ring-white/5"
+          >
+            <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+              React
+            </div>
+            <DropdownMenuGroup className="grid grid-cols-5 gap-1">
+              {REACTIONS.map((emoji) => (
+                <DropdownMenuItem
+                  key={emoji}
+                  onClick={() => react(emoji)}
+                  aria-label={`React with ${emoji}`}
+                  className="justify-center rounded-lg p-1.5 text-lg leading-none focus:bg-white/10"
+                >
+                  {emoji}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
+  );
+}
