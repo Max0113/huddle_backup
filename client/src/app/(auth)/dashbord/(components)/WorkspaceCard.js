@@ -13,6 +13,7 @@ import {
 import { ExternalLink, MoreVertical, Trash2, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/navigation";
 
 const checkerboardStyle = {
   backgroundColor: "#fafafa",
@@ -34,6 +35,7 @@ function WorkspacePreview({ title }) {
 }
 
 function WorkspaceMenu({ workspace, onDuplicate, onDelete }) {
+  const Router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -53,7 +55,10 @@ function WorkspaceMenu({ workspace, onDuplicate, onDelete }) {
       <DropdownMenuContent align="end" className="w-44">
         <DropdownMenuGroup>
           <DropdownMenuItem
-            onClick={() => toast.info(`Opening ${workspace.nom}…`)}
+            onClick={() => {
+              toast.info(`Opening ${workspace.nom}…`);
+              Router.push(`/spaces/join/${workspace.id}`);
+            }}
           >
             <ExternalLink aria-hidden="true" />
             Join

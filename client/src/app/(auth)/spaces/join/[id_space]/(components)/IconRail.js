@@ -24,9 +24,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
+import { Kbd } from "@/components/ui/kbd";
 
 import { copyInviteLink } from "./clipboard";
-import Portrait from "./Portrait";
 
 const MENU_CLASS =
   "dark w-64 border border-white/10 bg-[#141417] p-1.5 text-zinc-100 shadow-2xl ring-1 ring-white/5";
@@ -68,7 +74,7 @@ export default function IconRail({
         onClick={onSearch}
         aria-label="Search people (Ctrl+F)"
         title="Search people (Ctrl+F)"
-        className={cn(RAIL_BUTTON, "mt-5")}
+        className={cn(RAIL_BUTTON, "mt-5", "mb-2")}
       >
         <Search className="size-[18px]" aria-hidden="true" />
         <span className="pointer-events-none absolute -bottom-1 left-1/2 -translate-x-1/2 rounded bg-[#252529] px-1 text-[7px] font-semibold uppercase leading-[11px] tracking-wide text-zinc-400">
@@ -91,12 +97,7 @@ export default function IconRail({
         <DropdownMenuTrigger
           aria-label="Notifications"
           title="Notifications"
-          render={
-            <button
-              type="button"
-              className={cn(RAIL_BUTTON, "mt-1")}
-            />
-          }
+          render={<button type="button" className={cn(RAIL_BUTTON, "mt-1")} />}
         >
           <Bell className="size-[18px]" aria-hidden="true" />
           {hasUnread && !muted ? (
@@ -169,28 +170,28 @@ export default function IconRail({
             sideOffset={10}
             className={MENU_CLASS}
           >
-          <DropdownMenuGroup>
-            <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
-              Share the space
-            </div>
-            <DropdownMenuItem
-              onClick={copyInviteLink}
-              className="rounded-lg focus:bg-white/10 focus:text-white"
-            >
-              <Copy className="size-3.5" aria-hidden="true" />
-              Copy invite link
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled
-              className="rounded-lg focus:bg-white/10 focus:text-white"
-            >
-              <Mail className="size-3.5" aria-hidden="true" />
-              Invite by email
-              <span className="ml-auto text-[9px] uppercase tracking-wide text-zinc-500">
-                Soon
-              </span>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
+            <DropdownMenuGroup>
+              <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                Share the space
+              </div>
+              <DropdownMenuItem
+                onClick={copyInviteLink}
+                className="rounded-lg focus:bg-white/10 focus:text-white"
+              >
+                <Copy className="size-3.5" aria-hidden="true" />
+                Copy invite link
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled
+                className="rounded-lg focus:bg-white/10 focus:text-white"
+              >
+                <Mail className="size-3.5" aria-hidden="true" />
+                Invite by email
+                <span className="ml-auto text-[9px] uppercase tracking-wide text-zinc-500">
+                  Soon
+                </span>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -209,10 +210,11 @@ export default function IconRail({
           title={`${displayName} — profile`}
           className="relative mt-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#c4a7f5] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         >
-          <span className="block size-8 overflow-hidden rounded-full ring-2 ring-[#232327]">
-            <Portrait variant="youmes" name={displayName} />
-          </span>
-          <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full bg-emerald-400 ring-2 ring-black" />
+          <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarFallback>CN</AvatarFallback>
+            <AvatarBadge className="bg-green-600 dark:bg-green-800" />
+          </Avatar>
         </Link>
       </div>
     </nav>

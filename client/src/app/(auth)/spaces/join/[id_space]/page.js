@@ -16,7 +16,6 @@ import IconRail from "./(components)/IconRail";
 import MediaBar from "./(components)/MediaBar";
 import WorkspaceMap from "./(components)/WorkspaceMap";
 import WorkspaceSidebar from "./(components)/WorkspaceSidebar";
-import { MAP_PEOPLE } from "./(components)/data";
 
 const ACTION_BUTTON =
   "grid size-9 place-items-center rounded-full border border-white/10 bg-[#111114]/90 text-zinc-100 shadow-lg backdrop-blur-md outline-none transition-colors hover:bg-[#1d1d21] focus-visible:ring-2 focus-visible:ring-[#c4a7f5] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
@@ -96,7 +95,7 @@ export default function SpacePage() {
       </div>
 
       <main className="relative min-w-0 flex-1 overflow-hidden bg-[#83827e]">
-        <WorkspaceMap people={MAP_PEOPLE} />
+        <WorkspaceMap />
 
         <button
           type="button"

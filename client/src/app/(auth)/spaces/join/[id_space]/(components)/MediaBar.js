@@ -22,8 +22,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import Portrait from "./Portrait";
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
 
 const MENU_CLASS =
   "dark w-64 border border-white/10 bg-[#141417] p-1.5 text-zinc-100 shadow-2xl ring-1 ring-white/5";
@@ -87,10 +91,11 @@ export default function MediaBar({ displayName = "Youmes" }) {
 
       <div className="flex items-center gap-1 rounded-full border border-white/10 bg-[#101013]/95 p-1.5 shadow-[0_16px_44px_rgba(0,0,0,.5)] backdrop-blur-md">
         <div className="relative mr-1 ml-0.5">
-          <span className="block size-9 overflow-hidden rounded-full ring-2 ring-[#9564dd]">
-            <Portrait variant="youmes" name={displayName} />
-          </span>
-          <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full bg-emerald-400 ring-2 ring-[#101013]" />
+          <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarFallback>CN</AvatarFallback>
+            <AvatarBadge className="bg-green-600 dark:bg-green-800" />
+          </Avatar>
         </div>
 
         <div className="flex items-center rounded-full bg-white/[0.035] p-0.5 ring-1 ring-white/[0.05]">
