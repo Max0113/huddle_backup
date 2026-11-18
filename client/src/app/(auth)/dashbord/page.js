@@ -39,6 +39,7 @@ import { WorkspaceCard } from "./(components)/WorkspaceCard";
 import { ResourcesMenu } from "./(components)/ResourcesMenu";
 import { ro } from "zod/v4/locales";
 import { Connect_Dash } from "@/components/router/connect_dash";
+import { TbArrowUpRight } from "react-icons/tb";
 
 export default function DashboardPage() {
   const [workspaces, setWorkspaces] = useState([]);
@@ -74,6 +75,11 @@ export default function DashboardPage() {
         workspace.title.toLowerCase().includes(normalizedQuery),
       )
     : workspaces;
+
+  const handleJoinSpace = () => {
+    router.push("/spaces/join");
+    setQuery("");
+  };
 
   const handleCreateSpace = () => {
     router.push("/spaces/create");
@@ -145,6 +151,18 @@ export default function DashboardPage() {
 
           <div className="flex items-center gap-1.5 sm:gap-4">
             <ResourcesMenu />
+
+            <Button
+              type="button"
+              size="lg"
+              aria-label="Create Space"
+              onClick={handleJoinSpace}
+              variant="outline"
+              className="rounded-full px-3 text-base sm:px-4"
+            >
+              <TbArrowUpRight data-icon="inline-start" />
+              <span className="hidden sm:inline">Join Space</span>
+            </Button>
 
             <Button
               type="button"

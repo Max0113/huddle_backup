@@ -25,7 +25,6 @@ export function ResourcesMenu() {
         }
       >
         <Globe data-icon="inline-start" />
-        <span className="hidden sm:inline">Resources</span>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-48">
