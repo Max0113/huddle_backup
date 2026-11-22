@@ -30,13 +30,13 @@ import {
 } from "@/components/ui/avatar";
 
 const MENU_CLASS =
-  "dark w-64 border border-white/10 bg-[#141417] p-1.5 text-zinc-100 shadow-2xl ring-1 ring-white/5";
+  "w-64";
 
 const CONTROL_BUTTON =
-  "grid size-9 place-items-center rounded-full text-[#c4a7f5] outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#c4a7f5] focus-visible:ring-offset-2 focus-visible:ring-offset-[#101013]";
+  "grid size-9 place-items-center rounded-full text-primary outline-none transition-colors hover:bg-foreground/10 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card";
 
 const CHEVRON_BUTTON =
-  "grid h-9 w-5 place-items-center rounded-full text-zinc-400 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#c4a7f5] focus-visible:ring-offset-2 focus-visible:ring-offset-[#101013]";
+  "grid h-9 w-5 place-items-center rounded-full text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card";
 
 const REACTIONS = ["👋", "🎉", "❤️", "😂", "👍"];
 
@@ -89,7 +89,7 @@ export default function MediaBar({ displayName = "Youmes" }) {
         ))}
       </div>
 
-      <div className="flex items-center gap-1 rounded-full border border-white/10 bg-[#101013]/95 p-1.5 shadow-[0_16px_44px_rgba(0,0,0,.5)] backdrop-blur-md">
+      <div className="flex items-center gap-1 rounded-full border border-border bg-card/95 p-1.5 shadow-[0_16px_44px_rgba(0,0,0,.25)] backdrop-blur-md">
         <div className="relative mr-1 ml-0.5">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -98,7 +98,7 @@ export default function MediaBar({ displayName = "Youmes" }) {
           </Avatar>
         </div>
 
-        <div className="flex items-center rounded-full bg-white/[0.035] p-0.5 ring-1 ring-white/[0.05]">
+        <div className="flex items-center rounded-full bg-foreground/[0.04] p-0.5 ring-1 ring-foreground/5">
           <button
             type="button"
             onClick={() => setMicOn((value) => !value)}
@@ -131,18 +131,18 @@ export default function MediaBar({ displayName = "Youmes" }) {
                 value={micDevice}
                 onValueChange={setMicDevice}
               >
-                <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                   Microphone
                 </DropdownMenuLabel>
                 <DropdownMenuRadioItem
                   value="default"
-                  className="rounded-lg focus:bg-white/10 focus:text-white"
+                  className="rounded-lg focus:bg-muted focus:text-foreground"
                 >
                   Default microphone
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem
                   value="headset"
-                  className="rounded-lg focus:bg-white/10 focus:text-white"
+                  className="rounded-lg focus:bg-muted focus:text-foreground"
                 >
                   Studio headset
                 </DropdownMenuRadioItem>
@@ -150,7 +150,7 @@ export default function MediaBar({ displayName = "Youmes" }) {
               <DropdownMenuSeparator className="bg-white/5" />
               <DropdownMenuItem
                 onClick={() => setMicOn((value) => !value)}
-                className="rounded-lg focus:bg-white/10 focus:text-white"
+                className="rounded-lg focus:bg-muted focus:text-foreground"
               >
                 {micOn ? (
                   <MicOff className="size-3.5" aria-hidden="true" />
@@ -163,7 +163,7 @@ export default function MediaBar({ displayName = "Youmes" }) {
           </DropdownMenu>
         </div>
 
-        <div className="flex items-center rounded-full bg-white/[0.035] p-0.5 ring-1 ring-white/[0.05]">
+        <div className="flex items-center rounded-full bg-foreground/[0.04] p-0.5 ring-1 ring-foreground/5">
           <button
             type="button"
             onClick={() => setSoundOn((value) => !value)}
@@ -196,18 +196,18 @@ export default function MediaBar({ displayName = "Youmes" }) {
                 value={speakerDevice}
                 onValueChange={setSpeakerDevice}
               >
-                <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                   Speakers
                 </DropdownMenuLabel>
                 <DropdownMenuRadioItem
                   value="speakers"
-                  className="rounded-lg focus:bg-white/10 focus:text-white"
+                  className="rounded-lg focus:bg-muted focus:text-foreground"
                 >
                   MacBook speakers
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem
                   value="headphones"
-                  className="rounded-lg focus:bg-white/10 focus:text-white"
+                  className="rounded-lg focus:bg-muted focus:text-foreground"
                 >
                   Studio headphones
                 </DropdownMenuRadioItem>
@@ -215,7 +215,7 @@ export default function MediaBar({ displayName = "Youmes" }) {
               <DropdownMenuSeparator className="bg-white/5" />
               <DropdownMenuItem
                 onClick={() => setSoundOn((value) => !value)}
-                className="rounded-lg focus:bg-white/10 focus:text-white"
+                className="rounded-lg focus:bg-muted focus:text-foreground"
               >
                 {soundOn ? (
                   <VolumeX className="size-3.5" aria-hidden="true" />
@@ -228,7 +228,7 @@ export default function MediaBar({ displayName = "Youmes" }) {
           </DropdownMenu>
         </div>
 
-        <span className="mx-1 h-5 w-px bg-white/10" aria-hidden="true" />
+        <span className="mx-1 h-5 w-px bg-border" aria-hidden="true" />
 
         <DropdownMenu>
           <DropdownMenuTrigger
@@ -242,9 +242,9 @@ export default function MediaBar({ displayName = "Youmes" }) {
             side="top"
             align="center"
             sideOffset={12}
-            className="dark w-auto border border-white/10 bg-[#141417] p-1.5 text-zinc-100 shadow-2xl ring-1 ring-white/5"
+            className="w-auto"
           >
-            <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+            <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               React
             </div>
             <DropdownMenuGroup className="grid grid-cols-5 gap-1">
@@ -253,7 +253,7 @@ export default function MediaBar({ displayName = "Youmes" }) {
                   key={emoji}
                   onClick={() => react(emoji)}
                   aria-label={`React with ${emoji}`}
-                  className="justify-center rounded-lg p-1.5 text-lg leading-none focus:bg-white/10"
+                  className="justify-center rounded-lg p-1.5 text-lg leading-none focus:bg-muted"
                 >
                   {emoji}
                 </DropdownMenuItem>

@@ -1,6 +1,4 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -61,7 +59,7 @@ function WorkspaceMenu({ workspace, onDuplicate, onDelete }) {
             }}
           >
             <ExternalLink aria-hidden="true" />
-            Join
+            Open
           </DropdownMenuItem>
           <DropdownMenuItem onClick={onDuplicate}>
             <Copy aria-hidden="true" />
@@ -82,23 +80,18 @@ function WorkspaceMenu({ workspace, onDuplicate, onDelete }) {
   );
 }
 
+function formatRelativeDate(createdAt) {
+  if (!createdAt) return "";
+
+  const date = new Date(createdAt);
+
+  if (Number.isNaN(date.getTime())) return "Unknown date";
+
+  return formatDistanceToNow(date, { addSuffix: true });
+}
+
 export function WorkspaceCard({ workspace, onDuplicate, onDelete }) {
-  const [relativeDate, setRelativeDate] = useState("");
-
-  useEffect(() => {
-    const createdAt = workspace?.createdAt;
-
-    if (!createdAt) return;
-
-    const date = new Date(createdAt);
-
-    if (Number.isNaN(date.getTime())) {
-      setRelativeDate("Unknown date");
-      return;
-    }
-
-    setRelativeDate(formatDistanceToNow(date, { addSuffix: true }));
-  }, [workspace?.createdAt]);
+  const relativeDate = formatRelativeDate(workspace?.createdAt);
 
   return (
     <article className="group min-w-0">
