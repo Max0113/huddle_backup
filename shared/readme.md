@@ -115,22 +115,29 @@ _(Requires auth)_
 }
 ```
 
-### 3. Join Workspace
+### 3. Join Workspace With a Key
 
 **POST** `/workspaces/join`
-_(Requires auth)_
+_(Requires auth, rate limited)_
 **Body (JSON):**
 
 ```json
 {
-  "workspaceId": 3
+  "code": "K7QM-3XPD-9R"
 }
 ```
 
-### 4. Get Workspace By ID (For Phaser Game)
+The code is the workspace key (`WorkspaceInvitation.code`). Lowercase and
+dashes are accepted. The server validates `isActive`, `expiresAt` and
+`maxUses`, consumes one use and creates the `Member` row in one transaction.
 
-**GET** `/workspaces/:id` (e.g., `/workspaces/3`)
-_(Requires auth, MUST be a member of the workspace)_
+Returns `201` on success, `200` when already a member, `400` for every
+unusable key, and `429` after too many attempts.
+
+### 4. Get My Workspace By ID
+
+**GET** `/workspaces/:id`
+_(Requires auth, MUST be a member of the workspace — `403` otherwise)_
 **Returns (200):**
 
 ```json
@@ -142,18 +149,27 @@ _(Requires auth, MUST be a member of the workspace)_
       "url": "./assets/rooms/cafeteria.json",
       "mapWidth": 480,
       "mapHeight": 320
-    },
-    "members": [
-      {
-        "id": 1,
-        "userId": 1,
-        "role": "admin",
-        "user": { "nom": "Boulhout", "prenom": "Yassine" }
-      }
-    ]
-  }
+    }
+  },
+  "membership": { "id": 1, "role": "admin", "posX": 400, "posY": 300 },
+  "members": [
+    {
+      "id": 1,
+      "role": "admin",
+      "user": { "nom": "Boulhout", "prenom": "Yassine" }
+    }
+  ],
+  "invitation": { "code": "K7QM3XPD9R", "usedCount": 0 }
 }
 ```
+
+`invitation` is only returned to workspace admins.
+
+### 5. Manage Keys (admin only)
+
+- `GET /workspaces/:id/invitations` — list keys with usage.
+- `POST /workspaces/:id/invitations` — body `{ "maxUses": 20, "expiresAt": "..." }` (both optional).
+- `PATCH /workspaces/:id/invitations/:invitationId` — body `{ "isActive": false }` to revoke.
 
 ---
 

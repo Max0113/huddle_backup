@@ -3,31 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import {
-  BookOpen,
-  Copy,
-  ExternalLink,
-  Globe,
-  LifeBuoy,
-  MoreVertical,
-  Plus,
-  Search,
-  Trash2,
-  Users,
-} from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { toast } from "sonner";
 
 import UserAuth from "@/components/navbar/UserAuth";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
@@ -36,9 +17,9 @@ import {
 import { useAuth } from "@/components/context/auth";
 import { useRouter } from "next/navigation";
 import { WorkspaceCard } from "./(components)/WorkspaceCard";
-import { ResourcesMenu } from "./(components)/ResourcesMenu";
-import { ro } from "zod/v4/locales";
+import { ModeToggle } from "@/components/mode-toggle";
 import { Connect_Dash } from "@/components/router/connect_dash";
+import { TbArrowUpRight } from "react-icons/tb";
 
 export default function DashboardPage() {
   const [workspaces, setWorkspaces] = useState([]);
@@ -71,9 +52,14 @@ export default function DashboardPage() {
   const normalizedQuery = query.trim().toLowerCase();
   const visibleWorkspaces = normalizedQuery
     ? workspaces.filter((workspace) =>
-        workspace.title.toLowerCase().includes(normalizedQuery),
+        (workspace.nom ?? "").toLowerCase().includes(normalizedQuery),
       )
     : workspaces;
+
+  const handleJoinSpace = () => {
+    router.push("/spaces/join");
+    setQuery("");
+  };
 
   const handleCreateSpace = () => {
     router.push("/spaces/create");
@@ -97,11 +83,11 @@ export default function DashboardPage() {
     // setWorkspaces((current) =>
     //   current.filter((item) => item.id !== workspace.id),
     // );
-    toast.info(`"${workspace.title}" delete option is not active yet.`);
+    toast.info(`"${workspace.nom}" delete option is not active yet.`);
   };
 
   return (
-    <div className="dark flex min-h-svh flex-col bg-background text-foreground [color-scheme:dark]">
+    <div className="flex min-h-svh flex-col bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-border bg-card">
         <div className="mx-auto flex h-[72px] w-full max-w-[1280px] items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-5 ">
@@ -144,7 +130,18 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-4">
-            <ResourcesMenu />
+            <ModeToggle size="icon" />
+            <Button
+              type="button"
+              size="lg"
+              aria-label="Join Space"
+              onClick={handleJoinSpace}
+              variant="outline"
+              className="rounded-full px-3 text-base sm:px-4"
+            >
+              <TbArrowUpRight data-icon="inline-start" />
+              <span className="hidden sm:inline">Join Space</span>
+            </Button>
 
             <Button
               type="button"
